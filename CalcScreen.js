@@ -18,12 +18,25 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 15,
         margin: 10
+    },
+    prevOperationData: {
+        fontSize: 20,
+        color: '#212529', 
+        padding: 10
     }
 });
 
 export default function CalcScreen(props) {
     return (
         <SafeAreaView >
+            <View style={styles.container}>
+                <Text style={styles.prevOperationData}>
+                    {props.prevOperation}
+                </Text>
+            </View>
+            {
+                // hiển thị phép tính hiện tại và kết quả
+            }
             <View style={styles.container}>
                 <Text
                     style={styles.dataArea}

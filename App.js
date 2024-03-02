@@ -8,6 +8,7 @@ export default function App() {
   // dùng React Hooks để thay đổi giá trị của Data
   // khi giá trị của Data được thay đổi thì CalcScreen sẽ được render lại
   const [data, setData] = useState('');
+  const [prevOperation, setPrevOperation] = useState('');
 
   function handleCalcBtnClick(calcBtn) {
     console.log(calcBtn);
@@ -15,11 +16,12 @@ export default function App() {
     switch (calcBtn) {
       case '=': {
         setData(() => handleCalc(data));
+        setPrevOperation(() => data + ' = ' + handleCalc(data))
         break;
       }
 
       case 'Del': {
-        setData(() => data.slice(0, data.length - 1));
+        setData(() => data.substring(0, data.length - 1));
         break;
       }
 
@@ -29,7 +31,7 @@ export default function App() {
       }
 
       default: {
-        setData(prevData => prevData + calcBtn);
+        setData(prevData => prevData + '' + calcBtn);
       }
     }
   }
@@ -49,14 +51,21 @@ export default function App() {
 
     console.log('operand1: ', operands[0], operator, 'operand2: ', operands[1]);
 
+    if (operands.length == 2) {
+      let operand1 = parseFloat(operands[0]);
+      let operand2 = parseFloat(operands[1]);
+      switch (operator[0]) {
+        case '+': return operand1 + operand2;
+        case '-': return operand1 - operand2;
+        case '*': return operand1 * operand2;
+        case '/': return operand1 / operand2;
+      }
+    }
 
-    let operand1 = parseFloat(operands[0]);
-    let operand2 = parseFloat(operands[1]);
-    switch (operator[0]) {
-      case '+': return operand1 + operand2;
-      case '-': return operand1 - operand2;
-      case '*': return operand1 * operand2;
-      case '/': return operand1 / operand2;
+    // nếu chỉ có 1 số trên màn hình và bấm dấu =
+    // thì nó sẽ hiện ra số đó mà không bị lỗi
+    if (operands.length == 1) {
+      return operands[0];
     }
   }
 
@@ -65,6 +74,7 @@ export default function App() {
     <View style={styles.container}>
       <CalcScreen
         data={data}
+        prevOperation={prevOperation}
       />
 
       <CalcKeyboard onClick={handleCalcBtnClick} />
